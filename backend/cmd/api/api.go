@@ -38,10 +38,9 @@ func (app *application) mount() *chi.Mux {
 	// through ctx.Done() that the request has timed out and further
 	// processing should be stopped.
 	r.Use(middleware.Timeout(60 * time.Second))
-	r.Route("/", func(r chi.Router) {
-		r.Get("/users", app.healthCheckHandler)         // GET /articles/123
-		r.Post("/users", app.healthCheckHandler)        // PUT /articles/123
-		r.Delete("/users/{id}", app.healthCheckHandler) // DELETE /articles/123
+	r.Route("/users", func(r chi.Router) {
+		r.Post("/", app.createUserHandler)
+		r.Get("/{id}", app.getUserHandler)
 	})
 	return r
 }

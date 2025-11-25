@@ -1,0 +1,83 @@
+/* Full viewport scenic background */
+.app-bg {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-image: url('https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Dark gradient overlay to improve contrast */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.4)
+  );
+  pointer-events: none;
+}
+
+/* Center content with flexbox */
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* Card that will host the components via router-outlet */
+.content-card {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(15, 23, 42, 0.85); /* slate-like */
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(148, 163, 184, 0.3);
+  color: #e5e7eb;
+}
+
+/* Optional heading style inside child components */
+.content-card h1,
+.content-card h2 {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Optional button styling for both components */
+button {
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #0f172a;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.7);
+  filter: brightness(1.05);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.6);
+}
