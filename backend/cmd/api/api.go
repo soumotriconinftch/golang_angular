@@ -17,6 +17,13 @@ type application struct {
 
 type config struct {
 	addr string
+	db   dbConfig
+}
+type dbConfig struct {
+	addr         string
+	maxOpenConns int
+	maxIdleConns int
+	maxIdleTime  string
 }
 
 func (app *application) mount() *chi.Mux {
@@ -31,10 +38,10 @@ func (app *application) mount() *chi.Mux {
 	// through ctx.Done() that the request has timed out and further
 	// processing should be stopped.
 	r.Use(middleware.Timeout(60 * time.Second))
-	r.Route("/{articleID}", func(r chi.Router) {
-		r.Get("/users", app.getUser)           // GET /articles/123
-		r.Post("/users", app.createUser)       // PUT /articles/123
-		r.Delete("/users/{id}", deleteArticle) // DELETE /articles/123
+	r.Route("/", func(r chi.Router) {
+		r.Get("/users", app.healthCheckHandler)         // GET /articles/123
+		r.Post("/users", app.healthCheckHandler)        // PUT /articles/123
+		r.Delete("/users/{id}", app.healthCheckHandler) // DELETE /articles/123
 	})
 	return r
 }
