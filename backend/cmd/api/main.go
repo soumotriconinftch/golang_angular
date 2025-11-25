@@ -8,6 +8,6 @@ func main() {
 			addr: ":8080",
 		},
 	}
-
-	log.Fatal(app.run())
+	mux := app.mount()
+	log.Fatal(app.run(mux))
 }
