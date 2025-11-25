@@ -1,0 +1,26 @@
+<div class="video-container">
+    <div class="content-wrapper">
+        <div class="thank-you-message">
+            <h1>Thank You for Using My App! 🎉</h1>
+            <p>Now sit back, relax, and enjoy the video</p>
+        </div>
+
+        <div class="mini-tv">
+            <div class="tv-frame">
+                <div class="tv-screen">
+                    <video controls autoplay loop>
+                        <source src="assets/videoplayback.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="tv-stand">
+                    <div class="tv-base"></div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-back" (click)="goBack()">
+            <span class="icon">←</span> Back to Home
+        </button>
+    </div>
+</div>

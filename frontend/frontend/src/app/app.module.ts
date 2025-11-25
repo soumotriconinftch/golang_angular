@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { ComponentBComponent } from './component-b/component-b.component';
 import { ComponentCComponent } from './component-c/component-c.component';
+import { ComponentDComponent } from './component-d/component-d.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ComponentAComponent,
     ComponentBComponent,
-    ComponentCComponent
+    ComponentCComponent,
+    ComponentDComponent
   ],
   imports: [
     BrowserModule,

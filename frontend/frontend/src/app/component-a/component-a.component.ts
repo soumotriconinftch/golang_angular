@@ -29,10 +29,8 @@ export class ComponentAComponent {
       this.userService.createUser(this.user).subscribe({
         next: (response) => {
           console.log('User created:', response);
-          // Navigate to ComponentB with username in state
-          this.router.navigate(['/user'], {
-            state: { username: this.user.username }
-          });
+          // Navigate to ComponentD (Thank You page with video)
+          this.router.navigate(['/thankyou']);
         },
         error: (error) => {
           console.error('Error creating user:', error);
