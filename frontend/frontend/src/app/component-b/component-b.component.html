@@ -12,7 +12,7 @@
     </div>
 
     <div class="users-list" *ngIf="!isLoading && !errorMessage">
-        <div class="user-card" *ngFor="let user of users">
+        <div class="user-card" *ngFor="let user of users; let i = index" [style.--index]="i">
             <div class="user-header">
                 <h3>{{ user.username }}</h3>
                 <span class="user-id">ID: {{ user.id }}</span>
