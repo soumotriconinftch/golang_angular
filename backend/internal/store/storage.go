@@ -8,7 +8,7 @@ import (
 type Storage struct {
 	User interface {
 		GetByID(context.Context, int64) (*User, error)
-		Create(context.Context) error
+		Create(context.Context, *Users) error
 		Delete(context.Context, int64) error
 	}
 }
