@@ -3,9 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/szoumoc/golang+angular/internal/store"
 )
 
@@ -27,21 +25,14 @@ func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (app *application) getUserHandler(w http.ResponseWriter, r *http.Request) {
-	idParam := chi.URLParam(r, "id")
-	id, err := strconv.ParseInt(idParam, 10, 64)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	user, err := app.store.Users.GetByID(r.Context(), id)
+func (app *application) getAllUsersHandler(w http.ResponseWriter, r *http.Request) {
+	users, err := app.store.Users.GetAll(r.Context())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	if err := json.NewEncoder(w).Encode(user); err != nil {
+	if err := json.NewEncoder(w).Encode(users); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

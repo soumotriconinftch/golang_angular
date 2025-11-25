@@ -40,7 +40,10 @@ func (app *application) mount() *chi.Mux {
 	r.Use(middleware.Timeout(60 * time.Second))
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/", app.createUserHandler)
-		r.Get("/{id}", app.getUserHandler)
+		r.Group(func(r chi.Router) {
+			r.Use(app.checkUsernameMiddleware)
+			r.Get("/", app.getAllUsersHandler)
+		})
 	})
 	return r
 }

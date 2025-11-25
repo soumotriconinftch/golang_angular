@@ -52,3 +52,30 @@ func (s *UsersStore) GetByID(ctx context.Context, id int64) (*Users, error) {
 	}
 	return user, nil
 }
+
+func (s *UsersStore) GetAll(ctx context.Context) ([]*Users, error) {
+	query := `
+	SELECT id, username, content
+	FROM users
+	`
+	rows, err := s.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []*Users
+	for rows.Next() {
+		var user Users
+		if err := rows.Scan(&user.ID, &user.Username, &user.Content); err != nil {
+			return nil, err
+		}
+		users = append(users, &user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
