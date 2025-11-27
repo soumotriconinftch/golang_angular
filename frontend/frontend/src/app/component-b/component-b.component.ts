@@ -19,20 +19,18 @@ export class ComponentBComponent implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
-    // Get username from navigation state
     const navigation = this.router.getCurrentNavigation();
     this.username = navigation?.extras?.state?.['username'] || '';
   }
 
   ngOnInit(): void {
-    // Check if username is 'szoumo'
+    // Check username 'szoumo'
     if (this.username !== 'szoumo') {
-      // Not authorized, redirect to ComponentC
+
       this.router.navigate(['/unauthorized']);
       return;
     }
 
-    // Authorized, fetch users
     this.fetchUsers();
   }
 

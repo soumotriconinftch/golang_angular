@@ -4,13 +4,14 @@ import (
 	"log"
 
 	"github.com/szoumoc/golang+angular/internal/db"
+	"github.com/szoumoc/golang+angular/internal/env"
 	"github.com/szoumoc/golang+angular/internal/store"
 )
 
 func main() {
 
 	dbconf := dbConfig{
-		addr:         "postgresql://neondb_owner:npg_1klUxPQSmTV6@ep-quiet-bread-adu33e3q-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+		addr:         env.GetString("DB_ADDR", "LOL"),
 		maxOpenConns: 30,
 		maxIdleConns: 30,
 		maxIdleTime:  "15m",
@@ -31,7 +32,7 @@ func main() {
 
 	app := &application{
 		config: config{
-			addr: ":8080",
+			addr: env.GetString("ADDR", ":9000"),
 			db:   dbconf,
 		},
 		store: store,

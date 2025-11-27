@@ -10,7 +10,7 @@ type UsersStore struct {
 }
 
 type Users struct {
-	ID       int64  `json:"id"`
+	ID       int64  `json:"id" validate:"required"`
 	Username string `json:"username"`
 	Content  string `json:"content"`
 }

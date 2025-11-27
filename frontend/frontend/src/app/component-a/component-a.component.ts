@@ -29,7 +29,6 @@ export class ComponentAComponent {
       this.userService.createUser(this.user).subscribe({
         next: (response) => {
           console.log('User created:', response);
-          // Navigate to ComponentD (Thank You page with video)
           this.router.navigate(['/thankyou']);
         },
         error: (error) => {
@@ -45,14 +44,13 @@ export class ComponentAComponent {
   }
 
   viewUser() {
-    // Check if username is "szoumo"
+    // Check "szoumo"
     if (this.user.username.toLowerCase() === 'szoumo') {
-      // Navigate to ComponentB for szoumo
       this.router.navigate(['/user'], {
         state: { username: this.user.username }
       });
     } else {
-      // Navigate to ComponentC for everyone else
+      // everyone else
       this.router.navigate(['/unauthorized']);
     }
   }

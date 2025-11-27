@@ -9,6 +9,10 @@ import (
 
 func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request) {
 	var payload store.Users
+	
+	// log njk
+	// timeout/delay 5s
+	// log 2
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
