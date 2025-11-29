@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/szoumoc/golang+angular/internal/db"
-	"github.com/szoumoc/golang+angular/internal/env"
-	"github.com/szoumoc/golang+angular/internal/store"
+	"github.com/szoumoc/golang_angular/internal/db"
+	"github.com/szoumoc/golang_angular/internal/env"
+	"github.com/szoumoc/golang_angular/internal/store"
 )
 
 func main() {

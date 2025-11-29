@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/szoumoc/golang+angular/internal/store"
+	"github.com/szoumoc/golang_angular/internal/store"
 )
 
 type application struct {
@@ -44,10 +44,10 @@ func (app *application) mount() *chi.Mux {
 	})
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/", app.createUserHandler)
-		r.Group(func(r chi.Router) {
-			r.Use(app.checkUsernameMiddleware)
-			r.Get("/", app.getAllUsersHandler)
-		})
+		// r.Group(func(r chi.Router) {
+		// 	r.Use(app.checkUsernameMiddleware)
+		// 	r.Get("/", app.getAllUsersHandler)
+		// })
 	})
 	return r
 }
