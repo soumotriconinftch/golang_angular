@@ -38,9 +38,9 @@ func (app *application) mount() *chi.Mux {
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
 	})
-	r.Route("/users", func(r chi.Router) {
-		r.Post("/", app.createUserHandler)
-		r.Post("/login", app.loginHandler)
+	r.Route("/user", func(r chi.Router) {
+		r.Post("/sign-up", app.createUserHandler)
+		r.Post("/sign-in", app.loginHandler)
 		r.Group(func(r chi.Router) {
 			r.Use(app.AuthTokenMiddleware)
 			r.Get("/me", app.getCurrentUserHandler)
