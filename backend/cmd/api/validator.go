@@ -34,7 +34,6 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	// Parse and decode the JSON body
 	if err := json.NewDecoder(r.Body).Decode(sampleReq); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
@@ -44,7 +43,6 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate the request
 	if err := Validate.Struct(sampleReq); err != nil {
 		validationErrors := make(map[string][]string)
 		for _, err := range err.(validator.ValidationErrors) {
@@ -60,7 +58,6 @@ func Validator(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Send success response
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"code":    http.StatusOK,

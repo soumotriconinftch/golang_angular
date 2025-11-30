@@ -8,21 +8,17 @@ import (
 )
 
 var secretKey = []byte("abcdef")
-var username = "soumo"
 
-func GenerateToken() (string, error) {
-	fmt.Printf("calling token func")
+func GenerateToken(userID int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"username": username,
-			"role":     "admin",
-			"exp":      time.Now().Add(time.Hour * 24).Unix(),
+			"user_id": userID,
+			"exp":     time.Now().Add(time.Hour * 24).Unix(),
 		})
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
 		return "", err
 	}
-	fmt.Print(tokenString)
 	return tokenString, nil
 }
 

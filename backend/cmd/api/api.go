@@ -28,26 +28,23 @@ type dbConfig struct {
 
 func (app *application) mount() *chi.Mux {
 	r := chi.NewRouter()
-	// A good base middleware stack
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	r.Use(app.corsMiddleware) // Add CORS middleware
+	r.Use(app.corsMiddleware)
 
-	// Set a timeout value on the request context (ctx), that will signal
-	// through ctx.Done() that the request has timed out and further
-	// processing should be stopped.
-	r.Use(middleware.Timeout(1 * time.Second))
+	r.Use(middleware.Timeout(30 * time.Second))
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
 	})
 	r.Route("/users", func(r chi.Router) {
 		r.Post("/", app.createUserHandler)
-		// r.Group(func(r chi.Router) {
-		// 	r.Use(app.checkUsernameMiddleware)
-		// 	r.Get("/", app.getAllUsersHandler)
-		// })
+		r.Post("/login", app.loginHandler)
+		r.Group(func(r chi.Router) {
+			r.Use(app.AuthTokenMiddleware)
+			r.Get("/me", app.getCurrentUserHandler)
+		})
 	})
 	return r
 }
