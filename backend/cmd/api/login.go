@@ -14,7 +14,7 @@ type LoginPayload struct {
 }
 
 func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("========== LOGIN REQUEST STARTED ==========")
+	log.Println("LOGIN REQUEST STARTED")
 	var payload LoginPayload
 
 	log.Println("Step 1: Decoding JSON payload from request body")
@@ -56,19 +56,37 @@ func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Step 4 SUCCESS: Password matched")
 
 	log.Printf("Step 5: Generating JWT token for user ID: %d", user.ID)
-	token, err := auth.GenerateToken(user.ID)
-	if err != nil {
-		log.Printf("Step 5 FAILED: Failed to generate token: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
+	// token, err := auth.GenerateToken(user.ID)
+	// if err != nil {
+	// 	log.Printf("Step 5 FAILED: Failed to generate token: %v", err)
+	// 	http.Error(w, "Internal server error", http.StatusInternalServerError)
+	// 	return
+	// }
+	accessToken, _ := auth.GenerateAccessToken(user.ID)
+
+	refreshToken, _ := auth.GenerateRefreshToken(user.ID)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "accessToken",
+		Value:    accessToken,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   15 * 60,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refreshToken",
+		Value:    refreshToken,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   7 * 24 * 60 * 60,
+	})
 	log.Printf("Step 5 SUCCESS: Token generated successfully")
 
 	log.Println("Step 6: Sending success response with token")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"token": token,
 		"user": map[string]interface{}{
 			"id":       user.ID,
 			"username": user.Username,
@@ -76,5 +94,5 @@ func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 	log.Printf("Step 6 SUCCESS: Login completed for user: %s", user.Username)
-	log.Println("========== LOGIN REQUEST COMPLETED ==========")
+	log.Println("LOGIN REQUEST COMPLETED")
 }

@@ -42,7 +42,7 @@ func (app *application) mount() *chi.Mux {
 		r.Post("/sign-up", app.createUserHandler)
 		r.Post("/sign-in", app.loginHandler)
 		r.Group(func(r chi.Router) {
-			r.Use(app.AuthTokenMiddleware)
+			r.Use(app.AuthMiddleware)
 			r.Get("/me", app.getCurrentUserHandler)
 		})
 	})

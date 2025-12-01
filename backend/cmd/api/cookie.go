@@ -20,17 +20,17 @@ var users = []user{
 	{ID: 1, Username: "user", Password: "password"},
 }
 
-func abc() {
-	mux := http.NewServeMux()
+// func abc() {
+// 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/login", loginHandler)
-	mux.HandleFunc("/protected", protectedHandler)
-	mux.HandleFunc("/refresh", refreshHandler)
+// 	mux.HandleFunc("/login", loginnHandler)
+// 	mux.HandleFunc("/protected", protectedHandler)
+// 	mux.HandleFunc("/refresh", refreshHandler)
 
-	http.ListenAndServe(":3000", mux)
-}
+// 	http.ListenAndServe(":3000", mux)
+// }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+func loginnHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return

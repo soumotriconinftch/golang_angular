@@ -64,26 +64,52 @@ func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request
 	log.Printf("Step 5 SUCCESS: User created successfully with ID: %d", user.ID)
 
 	log.Printf("Step 6: Generating JWT token for user ID: %d", user.ID)
-	token, err := auth.GenerateToken(user.ID)
-	if err != nil {
-		log.Printf("Step 6 FAILED: Failed to generate token: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
+	accessToken, _ := auth.GenerateAccessToken(user.ID)
+
+	refreshToken, _ := auth.GenerateRefreshToken(user.ID)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "accessToken",
+		Value:    accessToken,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   15 * 60,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refreshToken",
+		Value:    refreshToken,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		MaxAge:   7 * 24 * 60 * 60,
+	})
+	log.Printf("Step 5 SUCCESS: Token generated successfully")
+
+	log.Println("Step 6: Sending success response with token")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"user": map[string]interface{}{
+			"id":       user.ID,
+			"username": user.Username,
+			"email":    user.Email,
+		},
+	})
 	log.Println("Step 6 SUCCESS: Token generated successfully")
 
-	log.Println("Step 7: Sending success response")
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	// log.Println("Step 7: Sending success response")
+	// w.Header().Set("Content-Type", "application/json")
+	// w.WriteHeader(http.StatusCreated)
 
-	if err := json.NewEncoder(w).Encode(map[string]interface{}{
-		"user":  user,
-		"token": token,
-	}); err != nil {
-		log.Printf("Step 7 FAILED: Failed to encode response: %v", err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		return
-	}
+	// if err := json.NewEncoder(w).Encode(map[string]interface{}{
+	// 	"user":  user,
+	// 	"token": token,
+	// }); err != nil {
+	// 	log.Printf("Step 7 FAILED: Failed to encode response: %v", err)
+	// 	http.Error(w, "Internal server error", http.StatusInternalServerError)
+	// 	return
+	// }
+
 	log.Printf("Step 7 SUCCESS: User registration completed for: %s", user.Username)
 	log.Println("========== CREATE USER REQUEST COMPLETED ==========")
 }

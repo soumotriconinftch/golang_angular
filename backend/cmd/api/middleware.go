@@ -1,9 +1,7 @@
 package main
 
 import (
-	"context"
 	"net/http"
-	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/szoumoc/golang_angular/internal/auth"
@@ -13,36 +11,51 @@ type contextKey string
 
 const userIDKey contextKey = "user_id"
 
-func (app *application) AuthTokenMiddleware(next http.Handler) http.Handler {
+func (a *application) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, "Authorization header is missing", http.StatusUnauthorized)
+
+		accessCookie, err := r.Cookie("accessToken")
+		if err == nil {
+			tok, err := auth.ValidateToken(accessCookie.Value)
+			if err == nil && tok.Valid {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
+
+		refreshCookie, err := r.Cookie("refreshToken")
+		if err != nil {
+			http.Error(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
 
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 || parts[0] != "Bearer" {
-			http.Error(w, "Invalid authorization header format", http.StatusUnauthorized)
+		refreshTok, err := auth.ValidateRefresh(refreshCookie.Value)
+		if err != nil || !refreshTok.Valid {
+			http.Error(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
 
-		tokenString := parts[1]
-		token, err := auth.ValidateToken(tokenString)
-		if err != nil || !token.Valid {
-			http.Error(w, "Invalid token", http.StatusUnauthorized)
-			return
-		}
-
-		claims, ok := token.Claims.(jwt.MapClaims)
+		claims, ok := refreshTok.Claims.(jwt.MapClaims)
 		if !ok {
-			http.Error(w, "Invalid token claims", http.StatusUnauthorized)
-			return
+			panic("invalid claims type")
 		}
 
-		userID := int64(claims["user_id"].(float64))
-		ctx := context.WithValue(r.Context(), userIDKey, userID)
-		next.ServeHTTP(w, r.WithContext(ctx))
+		raw, ok := claims["user_id"]
+		if !ok {
+			panic("user_id missing")
+		}
+		uid := raw.(int64)
+		newAccess, _ := auth.GenerateAccessToken(uid)
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "accessToken",
+			Value:    newAccess,
+			HttpOnly: true,
+			SameSite: http.SameSiteStrictMode,
+			MaxAge:   15 * 60,
+		})
+
+		next.ServeHTTP(w, r)
 	})
 }
 
