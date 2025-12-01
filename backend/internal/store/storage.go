@@ -13,10 +13,15 @@ type Storage struct {
 		// GetAll(context.Context) ([]*Users, error)
 		// Delete(context.Context, int64) error
 	}
+	Contents interface {
+		// GetContentbyID(context.Context, int64)(*Contents, error)
+		Create(context.Context, *Contents) error
+	}
 }
 
 func NewPostgresStorage(db *sql.DB) Storage {
 	return Storage{
-		Users: &UsersStore{db},
+		Users:    &UsersStore{db},
+		Contents: &ContentsStore{db},
 	}
 }

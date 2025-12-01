@@ -19,12 +19,12 @@ type Users struct {
 	ID       int64    `json:"id"`
 	Username string   `json:"username"`
 	Email    string   `json:"email"`
-	Password password `json:"-"`
+	Password PasswordData `json:"-"`
 }
 
-type password struct {
+type PasswordData struct {
 	text *string
-	hash []byte
+	Hash []byte
 }
 
 var (
@@ -32,7 +32,7 @@ var (
 	ErrorDuplicateUsername = errors.New("a user with that username already exists")
 )
 
-func (p *password) Set(pass string) error {
+func (p *PasswordData) Set(pass string) error {
 	log.Println("entering hashing")
 	cost := bcrypt.DefaultCost
 	bytes, err := bcrypt.GenerateFromPassword([]byte(pass), cost)
@@ -41,13 +41,13 @@ func (p *password) Set(pass string) error {
 		return err
 	}
 	p.text = &pass
-	p.hash = bytes
+	p.Hash = bytes
 	log.Println("hashed successfully")
 	return nil
 }
 
 func (u *Users) ComparePassword(plaintext string) error {
-	return bcrypt.CompareHashAndPassword(u.Password.hash, []byte(plaintext))
+	return bcrypt.CompareHashAndPassword(u.Password.Hash, []byte(plaintext))
 }
 
 func (s *UsersStore) Create(ctx context.Context, users *Users) error {
@@ -64,7 +64,7 @@ func (s *UsersStore) Create(ctx context.Context, users *Users) error {
 		query,
 		users.Username,
 		users.Email,
-		users.Password.hash,
+		users.Password.Hash,
 	).Scan(
 		&users.ID,
 	)
@@ -115,7 +115,7 @@ func (s *UsersStore) GetByEmail(ctx context.Context, email string) (*Users, erro
 		&user.ID,
 		&user.Username,
 		&user.Email,
-		&user.Password.hash,
+		&user.Password.Hash,
 	)
 	if err != nil {
 		return nil, err

@@ -9,6 +9,8 @@ import (
 	"github.com/szoumoc/golang_angular/internal/store"
 )
 
+
+
 type NewUserPayload struct {
 	Username string `json:"username" validate:"required,max=100"`
 	Email    string `json:"email" validate:"required,email,max=255"`
@@ -39,7 +41,6 @@ func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 	log.Println("Step 2 SUCCESS: Payload validation passed")
-
 	log.Println("Step 3: Creating user object")
 	user := &store.Users{
 		Username: payload.Username,
@@ -111,7 +112,7 @@ func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request
 	// }
 
 	log.Printf("Step 7 SUCCESS: User registration completed for: %s", user.Username)
-	log.Println("========== CREATE USER REQUEST COMPLETED ==========")
+	log.Println("CREATE USER REQUEST COMPLETED")
 }
 
 func (app *application) getCurrentUserHandler(w http.ResponseWriter, r *http.Request) {

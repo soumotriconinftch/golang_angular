@@ -15,13 +15,36 @@ func (a *application) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		accessCookie, err := r.Cookie("accessToken")
-		if err == nil {
-			tok, err := auth.ValidateToken(accessCookie.Value)
-			if err == nil && tok.Valid {
-				next.ServeHTTP(w, r)
-				return
-			}
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
 		}
+		tok, err := auth.ValidateToken(accessCookie.Value)
+		if err != nil {
+			// Access & refresh
+			// JWT is missing, JWT is invalid text, Not generated with secret key, jwt expired
+			http.Error(w, "unauthorized", http.StatusUnauthorized)
+			return
+		}
+		if tok.Valid {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		// 1. Validate the access token
+		// 2. If yes then serve with the write and reader
+		// 3. if expired and valid, then validate the refresh token
+		// 4. if refresh token is invalid then write http error for unauthorised
+		// 5. if refresh token is valid, then generate new access token
+		// 6. serve with write and reader
+
+		// if err == nil {
+		// 	tok, err := auth.ValidateToken(accessCookie.Value)
+		// 	if err == nil && tok.Valid {
+		// 		next.ServeHTTP(w, r)
+		// 		return
+		// 	}
+		// }
 
 		refreshCookie, err := r.Cookie("refreshToken")
 		if err != nil {
@@ -45,7 +68,11 @@ func (a *application) AuthMiddleware(next http.Handler) http.Handler {
 			panic("user_id missing")
 		}
 		uid := raw.(int64)
-		newAccess, _ := auth.GenerateAccessToken(uid)
+		newAccess, err := auth.GenerateAccessToken(uid)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
 
 		http.SetCookie(w, &http.Cookie{
 			Name:     "accessToken",

@@ -34,7 +34,7 @@
 
 4. BACKEND: Admin Table Creation
     - Define schema
-    - (Add isAdmin column) or separate admin table
+    - (Add isAdmin column) or separate role table
     - Populate initial admin entry
     - Create repo method to check admin status
 
@@ -65,7 +65,7 @@
     - Move username validation to service
     - Return user list
 
-10. HOME
+10. UI: HOME
 
     - Login is successful
         - Redirect "GET users/id/content"

@@ -44,6 +44,9 @@ func (app *application) mount() *chi.Mux {
 		r.Group(func(r chi.Router) {
 			r.Use(app.AuthMiddleware)
 			r.Get("/me", app.getCurrentUserHandler)
+			r.Route("/me/content", func(r chi.Router) {
+				// r.Get("/", app.getUserContentHandler)
+			})
 		})
 	})
 	return r
