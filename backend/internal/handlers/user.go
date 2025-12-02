@@ -98,13 +98,7 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	log.Println("Step 7: Sending success response with token")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"user": map[string]interface{}{
-			"id":       user.ID,
-			"username": user.Username,
-			"email":    user.Email,
-		},
-	})
+	json.NewEncoder(w).Encode(user)
 	log.Printf("Step 7 SUCCESS: User registration completed for: %s", user.Username)
 	log.Println("CREATE USER REQUEST COMPLETED")
 }

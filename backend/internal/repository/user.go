@@ -23,7 +23,7 @@ func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 	INSERT INTO users (username, email, password)
 	VALUES ($1, $2, $3) RETURNING id
 	`
-	ctx1, cancel := context.WithTimeout(ctx, time.Second*1)
+	ctx1, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
 	log.Println("Executing create user query")

@@ -21,7 +21,7 @@ func (r *ContentRepository) Create(ctx context.Context, content *models.Content)
 	INSERT INTO content (body, title, user_id)
 	VALUES ($1, $2, $3) RETURNING id, created_at
 	`
-	ctx1, cancel := context.WithTimeout(ctx, time.Second*1)
+	ctx1, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
 	err := r.db.QueryRowContext(ctx1,
