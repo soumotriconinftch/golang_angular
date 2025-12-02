@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/szoumoc/golang_angular/internal/ctxkey"
 	"github.com/szoumoc/golang_angular/internal/models"
 	"github.com/szoumoc/golang_angular/internal/repository"
@@ -79,4 +81,49 @@ func (h *ContentHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Step 6 SUCCESS: Content creation completed for: %s", content.Title)
 	log.Println("CREATE CONTENT REQUEST COMPLETED")
+}
+
+func (h *ContentHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+	userID, ok := r.Context().Value(ctxkey.UserID).(int64)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	contents, err := h.repo.Content.GetAll(r.Context(), userID)
+	if err != nil {
+		log.Printf("Failed to get content: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(contents); err != nil {
+		log.Printf("Failed to encode response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *ContentHandler) GetByID(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	content, err := h.repo.Content.GetByID(r.Context(), id)
+	if err != nil {
+		log.Printf("Failed to get content: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(content); err != nil {
+		log.Printf("Failed to encode response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 }

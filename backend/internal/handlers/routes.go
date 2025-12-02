@@ -29,6 +29,8 @@ func SetupRoutes(repo *repository.Repository) *chi.Mux {
 			r.Get("/me", userHandler.GetCurrentUser)
 			r.Route("/me/content", func(r chi.Router) {
 				r.Post("/", contentHandler.Create)
+				r.Get("/", contentHandler.GetAll)
+				r.Get("/{id}", contentHandler.GetByID)
 			})
 		})
 	})
