@@ -88,3 +88,33 @@ func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*models.
 	}
 	return user, nil
 }
+
+func (r *UserRepository) GetAll(ctx context.Context) ([]*models.User, error) {
+	query := `
+	SELECT id, username, email
+	FROM users
+	ORDER BY id ASC
+	`
+	ctx1, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	rows, err := r.db.QueryContext(ctx1, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []*models.User
+	for rows.Next() {
+		user := &models.User{}
+		if err := rows.Scan(
+			&user.ID,
+			&user.Username,
+			&user.Email,
+		); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
