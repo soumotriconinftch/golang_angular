@@ -72,16 +72,18 @@ func (r *UserRepository) GetByID(ctx context.Context, id int64) (*models.User, e
 
 func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*models.User, error) {
 	query := `
-	SELECT id, username, email, password
+	SELECT id, username, email, password, isadmin
 	FROM users
 	WHERE email = $1
 	`
+
 	user := &models.User{}
 	err := r.db.QueryRowContext(ctx, query, email).Scan(
 		&user.ID,
 		&user.Username,
 		&user.Email,
 		&user.Password.Hash,
+		&user.IsAdmin,
 	)
 	if err != nil {
 		return nil, err

@@ -3,6 +3,7 @@ package config
 type Config struct {
 	Server   ServerConfig
 	Database DatabaseConfig
+	Secret string
 }
 
 type ServerConfig struct {

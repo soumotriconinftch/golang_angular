@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/szoumoc/golang_angular/internal/auth"
 	"github.com/szoumoc/golang_angular/internal/ctxkey"
@@ -75,7 +76,7 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Step 5 SUCCESS: User created successfully with ID: %d", user.ID)
 
 	log.Printf("Step 6: Generating JWT token for user ID: %d", user.ID)
-	accessToken, _ := auth.GenerateAccessToken(user.ID)
+	accessToken, _ := auth.GenerateAccessToken(user.ID, user.IsAdmin)
 	refreshToken, _ := auth.GenerateRefreshToken(user.ID)
 
 	http.SetCookie(w, &http.Cookie{
@@ -114,7 +115,7 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("Step 1 SUCCESS: JSON decoded - Email: %s", payload.Email)
-
+	payload.Email = strings.TrimSpace(payload.Email)
 	log.Println("Step 2: Validating login payload")
 	if err := validator.Validate.Struct(payload); err != nil {
 		log.Printf("Step 2 FAILED: Validation failed: %v", err)
@@ -141,7 +142,7 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 	log.Println("Step 4 SUCCESS: Password matched")
 
 	log.Printf("Step 5: Generating JWT token for user ID: %d", user.ID)
-	accessToken, _ := auth.GenerateAccessToken(user.ID)
+	accessToken, _ := auth.GenerateAccessToken(user.ID, user.IsAdmin)
 	refreshToken, _ := auth.GenerateRefreshToken(user.ID)
 
 	http.SetCookie(w, &http.Cookie{
@@ -170,8 +171,18 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
+	// log.Printf("Value: %s", r.Context().Value("user_id"))
+	// user_ID := "user_id"
+	// log.Printf("Value: %s", r.Context().Value(user_ID))
+	// log.Printf("Value: %s", user_ID)
+	// type hello string
+	// var key hello = "user_id"
+
+	log.Printf("Value: %s", ctxkey.UserID)
+	log.Printf("Value: %s", r.Context().Value(ctxkey.UserID))
 	userID, ok := r.Context().Value(ctxkey.UserID).(int64)
 	if !ok {
+		log.Print("Failed to fetch value from the context")
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}

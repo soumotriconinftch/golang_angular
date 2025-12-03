@@ -31,9 +31,9 @@
     - Generate JWT
     - Return token
 
-4. BACKEND: Admin Table Creation
+4. BACKEND: Admin Table Creation (LATER)
     - Define schema
-    - (Add isAdmin column) or separate admin table
+    - Add **isAdmin column(DID THIS)** or separate admin table
     - Populate initial admin entry
     - Create repo method to check admin status
 
@@ -67,3 +67,6 @@
 
 (Might need modification as we dive deep into each problem)
 (CODE optimisation and testing to be done alongside or after feedback from Logesh.)
+
+
+<!-- Creating a fn with fn as argu, Fn returns fn -->

@@ -23,6 +23,7 @@ func main() {
 			MaxIdleConns: 30,
 			MaxIdleTime:  "15m",
 		},
+		Secret: env.GetString("ACCESS_SECRET","abc"),
 	}
 
 	db, err := database.New(
@@ -32,7 +33,7 @@ func main() {
 		config.Database.MaxIdleTime,
 	)
 	if err != nil {
-		log.Panic(err)
+		log.Fatal(err)
 	}
 	defer db.Close()
 	log.Println("DB connected!")

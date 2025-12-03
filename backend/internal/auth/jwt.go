@@ -10,10 +10,11 @@ import (
 var accessSecret = []byte("abcdef")
 var refreshSecret = []byte("uvwxyz")
 
-func GenerateAccessToken(userID int64) (string, error) {
+func GenerateAccessToken(userID int64, isAdmin bool) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": userID,
-		"exp":     time.Now().Add(15 * time.Minute).Unix(),
+		"user_id":  userID,
+		"is_admin": isAdmin,
+		"exp":      time.Now().Add(15 * time.Minute).Unix(),
 	})
 	return t.SignedString(accessSecret)
 }

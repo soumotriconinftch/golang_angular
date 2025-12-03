@@ -27,7 +27,7 @@ type CreateContentPayload struct {
 }
 
 func (h *ContentHandler) Create(w http.ResponseWriter, r *http.Request) {
-	log.Println("========== CREATE CONTENT REQUEST STARTED ==========")
+	log.Println("CREATE CONTENT REQUEST STARTED")
 	var payload CreateContentPayload
 
 	log.Println("Step 1: Decoding JSON payload from request body")

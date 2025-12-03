@@ -11,6 +11,13 @@ type User struct {
 	Username string       `json:"username"`
 	Email    string       `json:"email"`
 	Password PasswordData `json:"-"`
+	IsAdmin  bool         `json:"-"`
+}
+
+type User1 struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+	User User
 }
 
 type PasswordData struct {

@@ -26,14 +26,33 @@ func SetupRoutes(repo *repository.Repository) *chi.Mux {
 		r.Post("/sign-in", userHandler.SignIn)
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.Auth)
+			r.With(middleware.Authorization("is_admin")).Get("/", userHandler.GetAllUsers)
+
+			// r.Get("/", userHandler.GetAllUsers)
+
 			r.Get("/me", userHandler.GetCurrentUser)
-			r.Get("/all", userHandler.GetAllUsers)
+
 			r.Route("/me/content", func(r chi.Router) {
 				r.Post("/", contentHandler.Create)
 				r.Get("/", contentHandler.GetAll)
 				r.Get("/{id}", contentHandler.GetByID)
 			})
 		})
+
+		//TODO
+		// adminaccesskey := "is_admin"
+		// r.Group(func(r chi.Router) {
+		// 	r.Use(middleware.Authorization(adminaccesskey))
+		// 	r.Get("/", userHandler.GetAllUsers)
+		// })
+		// r.Use(middleware.Authorization).
+		// r.Get("/{id}", userHandler.GetUserDataAdmin)
+		// r.Get("/", userHandler.GetAllUsers)
+
+		// With adds inline middlewares for an endpoint handler.
+		// With(middlewares ...func(http.Handler) http.Handler) Router
+		// r.With(middleware.Authorization("is_admin")).Get("/", userHandler.GetAllUsers)
+
 	})
 
 	return r
