@@ -1,0 +1,50 @@
+<div class="login-form-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <h2 class="form-title">Welcome Back</h2>
+    <p class="form-subtitle">Sign in to continue</p>
+
+    <!-- Email Field -->
+    <div class="form-group">
+      <label for="email" class="form-label">Email Address</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-input"
+        placeholder="Enter your email"
+        [class.invalid]="email?.invalid && email?.touched"
+      />
+      <div class="error-message" *ngIf="email?.invalid && email?.touched">
+        <span *ngIf="email?.errors?.['required']">Email is required</span>
+        <span *ngIf="email?.errors?.['email']">Please enter a valid email address</span>
+      </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-input"
+        placeholder="Enter your password"
+        [class.invalid]="password?.invalid && password?.touched"
+      />
+      <div class="error-message" *ngIf="password?.invalid && password?.touched">
+        <span *ngIf="password?.errors?.['required']">Password is required</span>
+        <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="submit-btn"
+      [disabled]="loginForm.invalid"
+    >
+      Sign In
+    </button>
+  </form>
+</div>
+

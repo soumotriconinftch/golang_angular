@@ -42,3 +42,23 @@ func (p *PasswordData) Set(pass string) error {
 func (u *User) ComparePassword(plaintext string) error {
 	return bcrypt.CompareHashAndPassword(u.Password.Hash, []byte(plaintext))
 }
+
+// ONE WAY TO DO IT
+
+// func (u *User) Set(pass string) error {
+// 	log.Println("entering hashing")
+// 	cost := bcrypt.DefaultCost
+// 	bytes, err := bcrypt.GenerateFromPassword([]byte(pass), cost)
+// 	if err != nil {
+// 		log.Printf("Failed to hash password: %v", err)
+// 		return err
+// 	}
+// 	u.Password.text = &pass
+// 	u.Password.Hash = bytes
+// 	log.Println("hashed successfully")
+// 	return nil
+// }
+
+// func (u *User) ComparePassword(plaintext string) error {
+// 	return bcrypt.CompareHashAndPassword(u.Password.Hash, []byte(plaintext))
+// }
