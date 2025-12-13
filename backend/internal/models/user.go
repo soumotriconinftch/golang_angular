@@ -62,3 +62,35 @@ func (u *User) ComparePassword(plaintext string) error {
 // func (u *User) ComparePassword(plaintext string) error {
 // 	return bcrypt.CompareHashAndPassword(u.Password.Hash, []byte(plaintext))
 // }
+
+// type User1 struct {
+// 	ID   int64  `json:"id"`
+// 	Name string `json:"name"`
+// 	User *User
+// }
+
+// type User struct {
+// 	Name     string        `json:"name,omitempty"`
+// 	Address  *AddressModel `json:"address,omitempty"`
+// 	Age      int           `json:"age"`
+// 	Username string        `json:"username"`
+// 	Email    string        `json:"email"`
+// 	ID       int64         `json:"id"`
+// 	Password PasswordData  `json:"-"`
+// 	IsAdmin  bool          `json:"-"`
+// }
+
+// type BasicUser struct {
+// 	Name     string        `json:"name,omitempty"`
+// 	Age      int           `json:"age"`
+// 	Username string        `json:"username"`
+// 	Email    string        `json:"email"`
+// 	ID       int64         `json:"id"`
+// 	Password *PasswordData  `json:"-"`
+// 	IsAdmin  bool          `json:"-"`
+// }
+
+// type AddressModel struct {
+// 	Street string `json:"street"`
+// 	City   string `json:"city"`
+// }

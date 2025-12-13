@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Welcome to Our Service</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333333;
+        }
+
+        p {
+            color: #555555;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 3px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999999;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome, {{.Name}}!</h1>
+        <p>Thank you for signing up. We're excited to have you on board.</p>
+        <p>Please click the button below to verify your email address and get started:</p>
+        <a href="{{.ValidationURL}}" class="btn">Verify Email</a>
+        <p>If you have any questions, feel free to reply to this email.</p>
+        <div class="footer">
+            &copy; 2025 Your Company Soumo. All rights reserved.
+        </div>
+    </div>
+</body>
+
+</html>

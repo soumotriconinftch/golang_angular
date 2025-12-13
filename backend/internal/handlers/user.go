@@ -8,6 +8,8 @@ import (
 
 	"github.com/szoumoc/golang_angular/internal/auth"
 	"github.com/szoumoc/golang_angular/internal/ctxkey"
+	"github.com/szoumoc/golang_angular/internal/env"
+	mailservice "github.com/szoumoc/golang_angular/internal/mailService"
 	"github.com/szoumoc/golang_angular/internal/models"
 	"github.com/szoumoc/golang_angular/internal/repository"
 	"github.com/szoumoc/golang_angular/internal/validator"
@@ -74,6 +76,20 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("Step 5 SUCCESS: User created successfully with ID: %d", user.ID)
+
+	//email servvice
+	mailService := &mailservice.MailService{
+		From:         env.GetString("MAIL_FROM", "soumo.saha@triconinfotech.com"),
+		To:           user.Email,
+		Subject:      "Welcome to our platform!",
+		TemplateName: "welcome.html",
+		Data: map[string]interface{}{
+			"Name": user.Username,
+		},
+	}
+	if err := mailService.MailerFunc(); err != nil {
+		log.Printf("Step 5.1 WARNING: Failed to send welcome email: %v", err)
+	}
 
 	log.Printf("Step 6: Generating JWT token for user ID: %d", user.ID)
 	accessToken, _ := auth.GenerateAccessToken(user.ID, user.IsAdmin)
@@ -189,6 +205,7 @@ func (h *UserHandler) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.repo.User.GetByID(r.Context(), userID)
 	if err != nil {
+		// var wg sync.WaitGroup
 		log.Printf("Failed to get user by ID: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
