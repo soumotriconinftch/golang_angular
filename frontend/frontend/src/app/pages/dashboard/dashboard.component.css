@@ -1,0 +1,13 @@
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #FFFFFF;
+    color: #141414;
+}
+
+h1 {
+    font-size: 48px;
+    font-weight: 700;
+}
