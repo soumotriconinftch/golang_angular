@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -9,7 +11,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class LoginFormComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private AuthService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -32,6 +38,10 @@ export class LoginFormComponent implements OnInit {
       console.log('Login Form Data:', this.loginForm.value);
       // TODO: Implement actual login logic here
       // Example: this.authService.login(this.loginForm.value);
+      const isLoggedIn = this.AuthService.login(this.loginForm.value);
+      if (isLoggedIn) {
+        this.router.navigate(['/dashboard']);
+      }
     }
   }
 }
