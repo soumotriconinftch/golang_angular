@@ -13,6 +13,8 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { BlogboxComponent } from './components/blogbox/blogbox.component';
 
+import { FormatNamePipe } from './pipes/format-name.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +25,8 @@ import { BlogboxComponent } from './components/blogbox/blogbox.component';
     BlogOpenComponent,
     LoginFormComponent,
     SignupFormComponent,
-    BlogboxComponent
+    BlogboxComponent,
+    FormatNamePipe
   ],
   imports: [
     BrowserModule,
