@@ -36,12 +36,12 @@ export class LoginFormComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       console.log('Login Form Data:', this.loginForm.value);
-      // TODO: Implement actual login logic here
-      // Example: this.authService.login(this.loginForm.value);
-      const isLoggedIn = this.AuthService.login(this.loginForm.value);
-      if (isLoggedIn) {
-        this.router.navigate(['/dashboard']);
-      }
+      this.AuthService.login(this.loginForm.value).subscribe({
+        next: () => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => console.error(err) // Error is handled in service, but good to have here
+      });
     }
   }
 }

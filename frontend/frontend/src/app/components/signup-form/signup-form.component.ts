@@ -60,10 +60,23 @@ export class SignupFormComponent implements OnInit {
   onSubmit(): void {
     if (this.signupForm.valid) {
       console.log('Signup Form Data:', this.signupForm.value);
-      const success = this.authService.signup(this.signupForm.value);
-      if (success) {
-        this.router.navigate(['/dashboard']);
-      }
+      // Map username to name for the backend payload structure if needed, 
+      // but payload has 'username' and form has 'name'. 
+      // The backend SignUpPayload has Username.
+      // Let's check the form control name. It is 'name'.
+      // We might need to map it.
+      const payload = {
+        username: this.signupForm.value.name,
+        email: this.signupForm.value.email,
+        password: this.signupForm.value.password
+      };
+
+      this.authService.signup(payload).subscribe({
+        next: () => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => console.error(err)
+      });
     }
   }
 }
