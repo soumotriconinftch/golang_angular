@@ -12,9 +12,17 @@ export class DashboardComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    const user = this.authService.getCurrentUser();
-    if (user) {
-      this.username = user.name;
-    }
+    console.log("dashboard component")
+    this.authService.currentUser$.subscribe(user => {
+      console.log("user", user)
+      if (user) {
+        this.username = user.Username || user.username; // Handle case sensitivity
+      } else if (this.authService.isLoggedIn()) {
+        // If logged in but no user data (e.g. refresh), fetch it
+        this.authService.fetchCurrentUser().subscribe(x => {
+          console.log("user", x)
+        });
+      }
+    });
   }
 }

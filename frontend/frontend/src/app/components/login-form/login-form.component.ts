@@ -37,7 +37,8 @@ export class LoginFormComponent implements OnInit {
     if (this.loginForm.valid) {
       console.log('Login Form Data:', this.loginForm.value);
       this.AuthService.login(this.loginForm.value).subscribe({
-        next: () => {
+        next: (response) => {
+          console.log('Login Response:', response);
           this.router.navigate(['/dashboard']);
         },
         error: (err) => console.error(err) // Error is handled in service, but good to have here
