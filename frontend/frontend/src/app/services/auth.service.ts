@@ -11,7 +11,7 @@ export class AuthService {
     private apiUrl = 'http://localhost:8080/user';
     public currentContentSubject = new BehaviorSubject<any>(null);
     public currentContent$ = this.currentContentSubject.asObservable();
-    contents:any[] = [];
+    contents: any[] = [];
 
     constructor(private http: HttpClient) { }
 
@@ -87,8 +87,11 @@ export class AuthService {
             })
         );
     }
-    getCurrentContent(): any{
-        return this.currentContentSubject.value;
+    getCurrentContent(): Observable<any> {
+        return this.currentContentSubject;
+    }
+    setCurrentContent(content: any): void {
+        this.currentContentSubject.next(content);
     }
     getCurrentUser(): any {
         return this.currentUserSubject.value;

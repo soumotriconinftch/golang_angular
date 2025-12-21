@@ -1,4 +1,5 @@
 <div *ngFor="let item of content">
+    <button (click)="clicked(item)">Edit</button>
     <p>Title: {{item.title}} Body:{{item.body}}</p>
 </div>
 <button routerLink="/blog-open">Create New Blog</button>

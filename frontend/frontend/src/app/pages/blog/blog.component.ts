@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog',
@@ -7,7 +8,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./blog.component.css']
 })
 export class BlogComponent {
-  constructor(private AuthService: AuthService) { }
+  constructor(private AuthService: AuthService, private router: Router) { }
   data: any;
   content: any = [];
   ngOnInit() {
@@ -25,5 +26,10 @@ export class BlogComponent {
         console.log('Fetch user content completed.');
       }
     });
+  }
+  clicked(item: any) {
+    console.log('Button clicked', item);
+    this.AuthService.setCurrentContent(item);
+    this.router.navigate(['/blog-open']);
   }
 }
