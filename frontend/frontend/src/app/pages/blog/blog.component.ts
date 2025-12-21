@@ -32,4 +32,20 @@ export class BlogComponent {
     this.AuthService.setCurrentContent(item);
     this.router.navigate(['/blog-open']);
   }
+  createBlog() {
+    const newBlog = {
+      title: 'blogger pro max',
+      body: 'helloworld123'
+    };
+    this.AuthService.createContent(newBlog).subscribe({
+      next: (res: any) => {
+        this.AuthService.setCurrentContent(res);
+        this.ngOnInit();
+        // this.router.navigate(['/blog-open']);
+      },
+      error: (err: any) => {
+        console.error('Error creating blog:', err);
+      }
+    });
+  }
 }

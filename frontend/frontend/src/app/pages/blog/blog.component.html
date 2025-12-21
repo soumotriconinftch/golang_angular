@@ -1,5 +1,20 @@
-<div *ngFor="let item of content">
-    <button (click)="clicked(item)">Edit</button>
-    <p>Title: {{item.title}} Body:{{item.body}}</p>
+<div class="blog-listing-container">
+    <div class="blog-header">
+        <h1>Latest Insights</h1>
+        <button class="create-btn" (click)="createBlog()">
+            <span class="plus-icon">+</span> Create New Blog
+        </button>
+    </div>
+
+    <div class="blog-grid">
+        <div class="blog-preview-card" *ngFor="let item of content">
+            <div class="card-content">
+                <h2 class="preview-title">{{item.title}}</h2>
+                <p class="preview-body">{{item.body | slice:0:150}}{{item.body.length > 150 ? '...' : ''}}</p>
+            </div>
+            <div class="card-footer">
+                <button class="edit-btn" (click)="clicked(item)">Edit Post</button>
+            </div>
+        </div>
+    </div>
 </div>
-<button routerLink="/blog-open">Create New Blog</button>

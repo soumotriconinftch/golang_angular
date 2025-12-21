@@ -93,6 +93,9 @@ export class AuthService {
     setCurrentContent(content: any): void {
         this.currentContentSubject.next(content);
     }
+    createContent(content: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/me/content`, content, { withCredentials: true });
+    }
     getCurrentUser(): any {
         return this.currentUserSubject.value;
     }
