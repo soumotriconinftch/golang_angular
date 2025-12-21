@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
       } else if (this.authService.isLoggedIn()) {
         // If logged in but no user data (e.g. refresh), fetch it
         this.authService.fetchCurrentUser().subscribe(x => {
+          
           console.log("user", x)
         });
       }

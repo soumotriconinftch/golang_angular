@@ -9,6 +9,9 @@ export class AuthService {
     private currentUserSubject = new BehaviorSubject<any>(null);
     public currentUser$ = this.currentUserSubject.asObservable();
     private apiUrl = 'http://localhost:8080/user';
+    public currentContentSubject = new BehaviorSubject<any>(null);
+    public currentContent$ = this.currentContentSubject.asObservable();
+    contents:any[] = [];
 
     constructor(private http: HttpClient) { }
 
@@ -71,7 +74,22 @@ export class AuthService {
             })
         );
     }
-
+    fetchUserContent(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/me/content`, { withCredentials: true }).pipe(
+            map((content) => {
+                this.contents = content as any[];
+                this.currentContentSubject.next(this.contents);
+                return this.contents;
+            }),
+            catchError((error) => {
+                console.error('Failed to fetch user content:', error);
+                return throwError(() => error);
+            })
+        );
+    }
+    getCurrentContent(): any{
+        return this.currentContentSubject.value;
+    }
     getCurrentUser(): any {
         return this.currentUserSubject.value;
     }

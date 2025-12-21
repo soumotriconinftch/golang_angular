@@ -1,1 +1,4 @@
-<p>blog works!</p>
+<div *ngFor="let item of content">
+    <p>Title: {{item.title}} Body:{{item.body}}</p>
+</div>
+<button routerLink="/blog-open">Create New Blog</button>
