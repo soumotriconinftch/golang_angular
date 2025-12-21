@@ -121,25 +121,16 @@ golang_angular/
 #### Login
 1. Navigate to the login page
 2. Enter your email and password
-3. The form validates:
-   - Email is required and must be a valid format
-   - Password is required and must be at least 6 characters
-4. Submit button is disabled until all validations pass
-5. On successful validation, form data is logged to console (ready for backend integration)
+3. The form validates input requirements locally
+4. On submission, credentials are sent to the Go backend
+5. Successful login stores the session and redirects to the dashboard
 
 #### Signup
 1. Navigate to the signup page
-2. Fill in all required fields:
-   - Full Name (required)
-   - Email (required, valid format)
-   - Password (required, min 6 characters)
-   - Confirm Password (required, must match password)
-3. Real-time validation ensures:
-   - All fields are filled
-   - Email format is correct
-   - Passwords match
-4. Submit button is disabled until all validations pass
-5. On successful validation, form data is logged to console (ready for backend integration)
+2. Fill in all required fields
+3. Real-time validation ensures data integrity
+4. On submission, the user is created in the backend database
+5. Successful signup prompts the user to login
 
 ### Blog Features
 - **Dashboard**: View and manage your blog posts
@@ -168,35 +159,10 @@ golang_angular/
 
 ## 🔌 Backend Integration
 
-The forms are currently set up to log data to the console. To integrate with the backend:
-
-1. **Create an authentication service**:
-   ```typescript
-   // auth.service.ts
-   import { Injectable } from '@angular/core';
-   import { HttpClient } from '@angular/common/http';
-   
-   @Injectable({
-     providedIn: 'root'
-   })
-   export class AuthService {
-     private apiUrl = 'http://localhost:8080/api';
-     
-     constructor(private http: HttpClient) {}
-     
-     login(credentials: any) {
-       return this.http.post(`${this.apiUrl}/login`, credentials);
-     }
-     
-     signup(userData: any) {
-       return this.http.post(`${this.apiUrl}/signup`, userData);
-     }
-   }
-   ```
-
-2. **Update form components** to use the service instead of console.log
-
----
+The frontend is fully integrated with the Go backend via `AuthService`.
+- **Authentication**: Login and Signup endpoints are connected.
+- **Blog Data**: Blog posts are fetched from the backend API.
+- **CORS**: Configured to allow requests from the Angular frontend.
 
 ## 🚧 Development
 
